@@ -9,6 +9,7 @@
 #include <chrono>
 #include <exception>
 #include <format>
+#include <regex>
 
 using std::cout;
 using std::endl;
