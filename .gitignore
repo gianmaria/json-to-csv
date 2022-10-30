@@ -3,3 +3,4 @@ out/
 *.vcxproj.user
 .env
 *.json
+json-to-csv/breakingitaly.csv
