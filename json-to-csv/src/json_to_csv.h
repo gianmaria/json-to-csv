@@ -1,4 +1,5 @@
 #pragma once
+
 #include "pch.h"
 
 struct ISO_Duration
@@ -12,10 +13,10 @@ struct ISO_Duration
     uint32_t Min;
     uint32_t S;
 
-    uint32_t to_min();
-    string to_str();
+    uint32_t to_min() const noexcept;
+    string to_str() const noexcept;
 };
 
 ISO_Duration parse_ISO_duration(const string& duration);
 
-string UTC_to_excel(const std::string& input);
+std::tuple<string, string, string> UTC_to_excel(const std::string& input);

@@ -1,7 +1,8 @@
 #include "pch.h"
+
 #include "json_to_csv.h"
 
-uint32_t ISO_Duration::to_min()
+uint32_t ISO_Duration::to_min() const noexcept
 {
     return Min +
         H * 60 +
@@ -11,12 +12,14 @@ uint32_t ISO_Duration::to_min()
         Y * 525960;
 }
 
-string  ISO_Duration::to_str()
+string  ISO_Duration::to_str() const noexcept
 {
     string res;
-    res += std::to_string(H) + "H ";
-    res += std::to_string(Month) + "Min ";
-    res += std::to_string(S) + "S";
+    res.reserve(20);
+
+    if (H > 0) res += std::to_string(H) + "H ";
+    if (Min > 0) res += std::to_string(Min) + "Min ";
+    if (S > 0) res += std::to_string(S) + "S";
     return res;
 }
 
@@ -51,7 +54,7 @@ ISO_Duration parse_ISO_duration(const string& duration)
     return res;
 }
 
-string UTC_to_excel(const std::string& input)
+std::tuple<string, string, string> UTC_to_excel(const std::string& input)
 {
     std::istringstream ss(input);
     date::sys_seconds utc_tp; // sys_time associated with UTC timezone
@@ -68,5 +71,11 @@ string UTC_to_excel(const std::string& input)
     cout << "rome_time: " << current_zone_time << endl;
     */
 
-    return date::format("%d/%m/%Y,%H:%M:%S,%Z", current_zone_time);
+    auto res = std::make_tuple(
+        date::format("%d/%m/%Y", current_zone_time),
+        date::format("%H:%M:%S", current_zone_time),
+        date::format("%Z", current_zone_time)
+    );
+
+    return res;
 }
