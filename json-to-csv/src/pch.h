@@ -1,15 +1,17 @@
 #pragma once
 
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <vector>
+#include <algorithm>   
 #include <chrono>
 #include <exception>
+#include <filesystem>
 #include <format>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <regex>
+#include <string_view>
+#include <string>
+#include <vector>
 
 using std::cout;
 using std::endl;

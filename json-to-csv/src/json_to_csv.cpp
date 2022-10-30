@@ -63,17 +63,30 @@ std::tuple<string, string, string> UTC_to_excel(const std::string& input)
     const auto& stream = date::from_stream(ss, "%FT%T%Z", utc_tp, &timezone_name);
     assert(not stream.fail());
     assert(timezone_name == "Z"sv);
-
+    
     auto current_zone_time = date::make_zoned(date::current_zone(), utc_tp);
-
+    
     /*
     cout << "utc_time:  " << input << endl;
     cout << "rome_time: " << current_zone_time << endl;
     */
+    /*{
+        using namespace std::literals::chrono_literals;
+
+        auto t_local = current_zone_time.get_local_time();
+        auto today_local = std::chrono::floor<date::days>(t_local);
+        date::hh_mm_ss time_local{t_local - today_local};
+        date::year_month_day date_local{today_local};
+        auto min = time_local.minutes().count();
+        min = (min / 10) * 10;
+        time_local.minutes() = std::chrono::minutes(min);
+
+        int stoip = 0;
+    }*/
 
     auto res = std::make_tuple(
         date::format("%d/%m/%Y", current_zone_time),
-        date::format("%H:%M:%S", current_zone_time),
+        date::format("%H:%M", current_zone_time),
         date::format("%Z", current_zone_time)
     );
 

@@ -34,7 +34,7 @@ int main()
     {
         date::set_install(".\\data\\tzdata2020a");
         //date::get_tzdb().version;
-        
+
         //test();
 
         auto filepath = "data\\breakingitaly.json";
@@ -55,24 +55,49 @@ int main()
 
         ofs << "channel_name," << "video_title," <<
             "duration_min," << "published_day," <<
-            "published_at," << "timezone" << endl;
+            "published_at," << "timezone," << "url" << endl;
 
         auto const& channel_name = json["title"].get<string>();
 
         for (auto const& item : json["items"])
         {
-            auto const& video_title = item["title"].get<string>();
+            auto video_title = item["title"].get<string>();
+            std::replace(video_title.begin(), video_title.end(),
+                         '"', ' ');
+
+            auto const video_id = item["videoId"].get<string>();
             auto const duration = parse_ISO_duration(item["duration"].get<string>());
             auto const duration_min = duration.to_min();
-            auto const [published_day, published_at, timezone] = UTC_to_excel(item["publishedAt"].get<string>());
+            auto [published_day, published_at, timezone] = UTC_to_excel(item["publishedAt"].get<string>());
+
+            {
+                // just some mumbo jumbo, don't mind me
+                std::tm t{};
+                std::istringstream is(published_at);
+                //is.imbue(std::locale("de_DE.utf-8"));
+                is >> std::get_time(&t, "%H:%M");
+                
+                t.tm_min = (t.tm_min / 10) * 10; // truncate
+
+                std::ostringstream os;
+                os << std::put_time(&t, "%H:%M");
+                
+                published_at = os.str();
+            }
 
             if (duration_min > 1 && duration_min < 30)
             {
-                auto csv_line = std::format(R"("{}","{}",{},{},{},{})",
-                                            channel_name, video_title, 
-                                            duration_min, published_day,
-                                            published_at, timezone);
-                ofs << csv_line << endl;
+                bool parliamone_video =
+                    video_title.find("Parliamone") != string::npos;
+
+                if (not parliamone_video)
+                {
+                    auto csv_line = std::format(R"("{}","{}",{},{},{},{},https://www.youtube.com/watch?v={})",
+                                                channel_name, video_title,
+                                                duration_min, published_day,
+                                                published_at, timezone, video_id);
+                    ofs << csv_line << endl;
+                }
             }
             else
             {
