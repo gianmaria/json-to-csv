@@ -32,6 +32,13 @@ ISO_Duration parse_ISO_duration(const string& duration)
     }
 
     res.Y = match[1].matched ? std::stoul(match[1]) : 0;
+    res.M = match[2].matched ? std::stoul(match[2]) : 0;
+    res.W = match[3].matched ? std::stoul(match[3]) : 0;
+    res.D = match[4].matched ? std::stoul(match[4]) : 0;
+
+    res.H = match[5].matched ? std::stoul(match[5]) : 0;
+    res.Min = match[6].matched ? std::stoul(match[6]) : 0;
+    res.S = match[7].matched ? std::stoul(match[7]) : 0;
 
     return res;
 }
