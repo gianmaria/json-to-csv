@@ -20,5 +20,10 @@ using namespace std::string_literals;
 
 namespace fs = std::filesystem;
 
-#include "date/date.h"
-#include "date/tz.h"
+#include <date/date.h>
+#include <date/tz.h>
+
+#define JSON_USE_IMPLICIT_CONVERSIONS 0
+#include <nlohmann/json.hpp>
+
+using njson = nlohmann::json;
