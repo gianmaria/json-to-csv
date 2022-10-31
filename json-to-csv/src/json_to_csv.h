@@ -1,7 +1,5 @@
 #pragma once
 
-#include "pch.h"
-
 struct ISO_Duration
 {
     uint32_t Y;
