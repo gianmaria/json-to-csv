@@ -60,7 +60,7 @@ std::tuple<string, string, string> UTC_to_excel(const std::string& input)
     date::sys_seconds utc_tp; // sys_time associated with UTC timezone
     string timezone_name;
 
-    const auto& stream = date::from_stream(ss, "%FT%T%Z", utc_tp, &timezone_name);
+    [[maybe_unused]] const auto& stream = date::from_stream(ss, "%FT%T%Z", utc_tp, &timezone_name);
     assert(not stream.fail());
     assert(timezone_name == "Z"sv);
     
